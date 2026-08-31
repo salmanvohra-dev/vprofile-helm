@@ -4,25 +4,18 @@ kind: Ingress
 metadata:
   name: vpro-ingress
   annotations:
-    kubernetes.io/ingress.class: alb
-    alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:631690098885:certificate/9146c0dd-04a4-4cfa-93d2-7019f4ab19c8
-    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80},{"HTTPS":443}]'
-    alb.ingress.kubernetes.io/ssl-redirect: '443'
-    alb.ingress.kubernetes.io/backend-protocol: HTTP
-
-
-  ingressClassName: alb
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
   rules:
-  - host: {{ .Values.ingress.host }}
+  - host: argocd.salmancloud.xyz   # Tera DNS naam
     http:
       paths:
       - path: /
-        pathType: Prefix
+        pathType: Prefix           # YE LINE MANDATORY HAI 1.30 MEIN
         backend:
           service:
-            name: vproapp-service
+            name: vproapp-service  # Purana 'serviceName' hatake 'service -> name'
             port:
-              number: {{ .Values.ingress.servicePort }}
+              number: 8080         # Purana 'servicePort' hatake 'port -> number'
 {{- end }}
