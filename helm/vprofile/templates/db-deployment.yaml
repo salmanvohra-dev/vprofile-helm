@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.db.name }}
+  labels:
+    app: {{ .Values.db.name }}
+spec:
+  replicas: {{ .Values.db.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.db.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.db.name }}
+    spec:
+      {{- if .Values.dockerregistry.enabled }}
+      imagePullSecrets:
+      - name: dockerregistry-secret
+      {{- end }}
+      containers:
+      - name: {{ .Values.db.name }}
+        image: {{ .Values.db.image }}:{{ .Values.db.tag }}
+        ports:
+        - name: {{ .Values.db.name }}-port
+          containerPort: {{ .Values.db.containerPort }}
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.secrets.appSecret.name }}
+              key: db-pass
+        volumeMounts:
+        - mountPath: /var/lib/mysql
+          name: vpro-db-data
+      volumes:
+      - name: vpro-db-data
+        persistentVolumeClaim:
+          claimName: db-pv-claim
+      initContainers:
+      - name: busybox
+        image: {{ .Values.initcontainers.busybox.image }}:{{ .Values.initcontainers.busybox.tag }}
+        command: ["sh", "-c", "rm -rf /var/lib/mysql/lost+found"]
+        volumeMounts:
+        - name: vpro-db-data
+          mountPath: /var/lib/mysql

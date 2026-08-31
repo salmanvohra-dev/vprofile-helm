@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.app.name }}
+  labels:
+    app: {{ .Values.app.name }}
+spec:
+  replicas: {{ .Values.app.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.app.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.app.name }}
+    spec:
+      {{- if .Values.dockerregistry.enabled }}
+      imagePullSecrets:
+      - name: dockerregistry-secret
+      {{- end }}
+      containers:
+      - name: {{ .Values.app.name }}
+        image: {{ .Values.app.image }}:{{ .Values.app.tag }}
+        imagePullPolicy: Always
+        ports:
+        - name: {{ .Values.app.name }}-port
+          containerPort: {{ .Values.app.containerPort }}
+      initContainers:
+      - name: init-mydb
+        image: {{ .Values.initcontainers.busybox.image }}:{{ .Values.initcontainers.busybox.tag }}
+        command: ["sh", "-c", "until nslookup {{ .Values.db.name }}.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for mydb; sleep 2; done;"]
+      - name: init-memcache
+        image: {{ .Values.initcontainers.busybox.image }}:{{ .Values.initcontainers.busybox.tag }}
+        command: ["sh", "-c", "until nslookup {{ .Values.memcached.name }}.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for memcache; sleep 2; done;"]

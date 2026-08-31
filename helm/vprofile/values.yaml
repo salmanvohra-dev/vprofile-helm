@@ -1,0 +1,66 @@
+# App Configuration
+app:
+  name: vproapp
+  image: vprocontainers/vprofileapp
+  tag: latest
+  replicas: 1
+  containerPort: 8080
+  servicePort: 8080
+
+# Database Configuration
+db:
+  name: vprodb
+  image: vprocontainers/vprofiledb
+  tag: latest
+  replicas: 1
+  containerPort: 3306
+  servicePort: 3306
+  storageClass: gp2
+  storageSize: 3Gi
+  defaultUser: root
+
+# Memcached Configuration
+memcached:
+  name: vpromc
+  image: memcached
+  tag: latest
+  replicas: 1
+  containerPort: 11211
+  servicePort: 11211
+
+# RabbitMQ Configuration
+rabbitmq:
+  name: vpromq01
+  image: rabbitmq
+  tag: latest
+  replicas: 1
+  containerPort: 5672
+  servicePort: 5672
+  defaultUser: guest
+
+# Init Containers Configuration
+initcontainers:
+  busybox:
+    image: busybox
+    tag: latest
+
+# Ingress Configuration
+ingress:
+  enabled: true
+  host: vprofile.salmancloud.xyz
+  servicePort: 8080
+
+# Secrets Configuration
+secrets:
+  appSecret:
+    name: app-secret
+    dbPassword: dnByb2RicGFzcw==
+    rmqPassword: Z3Vlc3Q=
+
+# Docker Registry Secret Configuration
+dockerregistry:
+  enabled: false
+  server: docker.io
+  username: ""
+  password: ""
+  email: ""
