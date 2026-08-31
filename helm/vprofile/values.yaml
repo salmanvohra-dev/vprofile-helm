@@ -19,7 +19,7 @@ db:
   defaultUser: root
 # Memcached Configuration
 memcached:
-  name: vpromc
+  name: vprocache01
   image: memcached
   tag: latest
   replicas: 1
