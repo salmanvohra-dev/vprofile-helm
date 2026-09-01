@@ -27,11 +27,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: vpromc
+  name: vprocache01    # <--- App yahi dhoondh raha hai, toh naam yahi rahega!
 spec:
   ports:
   - port: {{ .Values.memcached.servicePort }}
-    targetPort: mc-port
+    targetPort: mc-port    # <--- Chota naam taaki 15 char limit cross na ho
     protocol: TCP
   selector:
     app: {{ .Values.memcached.name }}
