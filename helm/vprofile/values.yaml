@@ -19,7 +19,7 @@ db:
   defaultUser: root
 # Memcached Configuration
 memcached:
-  name: vprocache01
+  name: vpromc       # <--- YE RAHA TERA MASTER STROKE
   image: memcached
   tag: latest
   replicas: 1
