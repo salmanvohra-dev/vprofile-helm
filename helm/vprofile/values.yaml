@@ -2,7 +2,7 @@
 app:
   name: vproapp
   image: 631690098885.dkr.ecr.us-east-1.amazonaws.com/vprofileappimg
-  tag: c9a40b02cf8da963479295a5ceee15c9f7f93b5a
+  tag: cb7fa4206f77aec6b7f4b97ad84c8fd0489843af
   replicas: 1
   containerPort: 8080
   servicePort: 8080
