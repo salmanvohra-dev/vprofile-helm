@@ -2,7 +2,7 @@
 app:
   name: vproapp
   image: 631690098885.dkr.ecr.us-east-1.amazonaws.com/vprofileappimg
-  tag: d3db917537d7a24f724d155909e127f7d6989121
+  tag: c9a40b02cf8da963479295a5ceee15c9f7f93b5a
   replicas: 1
   containerPort: 8080
   servicePort: 8080
@@ -19,7 +19,7 @@ db:
   defaultUser: root
 # Memcached Configuration
 memcached:
-  name: vpromc       # <--- YE RAHA TERA MASTER STROKE
+  name: vpromc # <--- YE RAHA TERA MASTER STROKE
   image: memcached
   tag: latest
   replicas: 1
